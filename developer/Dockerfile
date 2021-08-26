@@ -1,9 +1,4 @@
-FROM quay.io/alexcheng1982/apache2-php7:7.3.12
-
-LABEL maintainer="alexcheng1982@gmail.com"
-LABEL php_version="7.3.12"
-LABEL magento_version="2.3.6"
-LABEL description="Magento 2.3.6 with PHP 7.3.12"
+FROM fkiwowicz/docker-apache2-php7
 
 ENV MAGENTO_VERSION 2.3.6
 ENV INSTALL_DIR /var/www/html
@@ -38,7 +33,7 @@ RUN cd /tmp && \
   mv magento2-$MAGENTO_VERSION/* magento2-$MAGENTO_VERSION/.htaccess $INSTALL_DIR
 
 RUN chown -R www-data:www-data /var/www
-RUN su www-data -c "cd $INSTALL_DIR && composer install"
+RUN su www-data -c "cd $INSTALL_DIR && composer update --ignore-platform-reqs && composer install --ignore-platform-reqs"
 RUN su www-data -c "cd $INSTALL_DIR && composer config repositories.magento composer https://repo.magento.com/"  
 
 RUN cd $INSTALL_DIR \
